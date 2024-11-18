@@ -1,0 +1,67 @@
+{
+    "name": "LoRa_Cao_DMS_Finetune",
+    "n_gpu": 1,
+
+    "resume": "/home/jiannanyang/project/viral-mutation-pytorch/saved/TLAttBERT_Sample_Seq2DayLineage/models/COV_Cao_Pretrain/0915_232446/pytorch_model.bin",
+
+    "dataset": {
+        "type": "DMSFinetuneDataset",
+        "args":{
+            "data_dir": "/home/jiannanyang/project/viral-mutation-pytorch/data/COVID-19/prepared",
+            "tokenizer_dir": "/home/jiannanyang/project/viral-mutation-pytorch/saved/TLAttBERT_Sample_Seq2DayLineage/models/COV_Cao_Pretrain_MostLineage/0915_232446",
+            "virus_name": "cov",
+            "cut_off_start": "2020-01-01",
+            "cut_off_end": "2022-09-07",
+            "seed": 0,
+            "valid_ratio": 0.1,
+            "test_ratio": 0.1,
+            "batch_size": 4,
+            "dataset_name": "TLAttBERTDataset",
+            "use_data": "Cao_DMS",
+            "aggregate_day_lineage": "mode",
+            "for_LoRa": true,
+            "target_virus": "D614G",
+            "target_condition": null,
+            "n_samples": 10
+        }
+    },
+
+    "model": {
+        "name": "TLAttBERT",
+        "time_embedding_type": "temporal_attention",
+        "model_args":{
+            "gradient_checkpointing": false,
+            "hidden_size": 768,
+            "num_hidden_layers": 12,
+            "num_attention_heads": 12,
+            "intermediate_size": 3072,
+            "hidden_act": "gelu",
+            "hidden_dropout_prob": 0.1,
+            "attention_probs_dropout_prob": 0.1,
+            "type_vocab_size": 2,
+            "initializer_range": 0.02,
+            "position_embedding_type": "absolute"
+        },
+        "args":{
+            "intermediate_dim": 256,
+            "dropout": 0.1
+        }
+    },
+
+    "trainer": {
+        "batch_size": 6,
+        "logging_steps": 1,
+        "epochs": 30,
+        "weight_decay": 0.02,
+        "lr": 2e-4,
+
+        "save_dir": "saved/TLAttBERT_Sample_Seq2DayLineage/",
+        "verbosity": 2
+    },
+
+    "inference": {
+        "inference_mutation_dir": "/home/jiannanyang/project/viral-mutation-pytorch/analysis/3_get_following_mutation/output/mutation_2022-09-08_2022-12-08.csv",
+        "inference_aggregate_day_lineage": "mode",
+        "ref_seq_name": "D614G"
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "name": "COV_Cao_Pretrain",
+
+    "dataset": {
+        "type": "MAADataset",
+        "args":{
+            "data_dir": "/home/jiannanyang/project/viral-mutation-pytorch/data/COVID-19/prepared",
+            "virus_name": "cov",
+            "seed": 0,
+            "test_ratio": 0.01,
+            "cut_off_start": "2020-01-01",
+            "cut_off_end": "2022-09-07",
+            "use_all_for_train": true,
+            "dataset_name": "TLAttBERTDataset",
+            "no_mask_time": true,
+            "no_mask_lineage": true,
+            "sample_ratio": 1,
+            "sample_method": "sample_seq2day-lineage"
+        }
+    },
+
+    "model": {
+        "name": "TLAttBERT",
+        "type": "bert",
+        "time_embedding_type": "temporal_attention",
+        "args":{
+            "gradient_checkpointing": false,
+            "hidden_size": 768,
+            "num_hidden_layers": 12,
+            "num_attention_heads": 12,
+            "intermediate_size": 3072,
+            "hidden_act": "gelu",
+            "hidden_dropout_prob": 0.1,
+            "attention_probs_dropout_prob": 0.1,
+            "type_vocab_size": 2,
+            "initializer_range": 0.02,
+            "position_embedding_type": "absolute"
+        }
+    },
+
+    "trainer": {
+        "mlm_probability": 0.15,
+
+        "batch_size": 8,
+        "logging_steps": 100,
+        "epochs": 5,
+        "weight_decay": 0.1,
+        "lr": 1e-4,
+        "warmup_steps": 1000,
+        "fp16": false,
+
+        "save_dir": "saved/TLAttBERT_Sample_Seq2DayLineage/",
+        "verbosity": 2
+    }
+}
